@@ -1,0 +1,48 @@
+'''
+Created on Feb 5, 2015
+
+@author: wange
+'''
+import pylab
+import numpy as np
+from pylab import show
+from scipy.constants import *
+import matplotlib.pyplot as plt
+from scipy.stats import maxwell
+import math
+from pprint import pprint
+from numpy import genfromtxt
+from scipy.interpolate import interp1d
+
+mfp=5
+bandgap=1.2
+n=100
+eemfpdata = genfromtxt('K2CsSb_ees.csv',delimiter=',')
+eemfp= interp1d(eemfpdata[:,0], eemfpdata[:,1])
+
+p2De_s=np.random.uniform(0.0,2.0,n)
+printlist=np.zeros((n,6))
+r=(mfp/(eemfp(p2De_s)/10)/10).astype(float)
+eoverh=1 # e-e or e-h scatter ratio
+eest=int(eoverh*len(p2De_s)/(eoverh+1)) #e-e scattering number
+
+eelist= np.array(eest*[1]+(len(p2De_s)-eest)*[0])
+np.random.shuffle(eelist) # e-h or e-e scattering happen list will use
+
+ehlist=np.add(1,np.negative(eelist))
+eest_ranlist=np.random.uniform(bandgap,p2De_s)
+ehst_ranlist=np.random.uniform(0,1.27)
+multi_eest=np.minimum(int(r),int(np.add(p2De_s,bandgap)/bandgap))* eest_ranlist*eelist
+multi_ehst=np.minimum(int(r),int(np.add(p2De_s,bandgap)/bandgap))*ehst_ranlist*ehlist
+sing_eest=np.random.uniform(bandgap,p2De_s)
+sing_ehst=np.random.uniform(0,1.27)
+
+
+printlist[:,0]=p2De_s
+printlist[:,1]=r
+printlist[:,2]=eelist
+printlist[:,3]=multi_eest
+printlist[:,4]=ehlist
+printlist[:,5]=multi_ehst
+print printlist
+
