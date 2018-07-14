@@ -1,7 +1,7 @@
 '''
 Created on Feb 5, 2015
 
-@author: E. Wang
+@author: Erdong Wang
 
 |----------------------------|
 |                            |
